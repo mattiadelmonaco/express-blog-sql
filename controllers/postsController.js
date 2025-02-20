@@ -30,19 +30,44 @@ const index = (req, res) => {
 
 // Show
 const show = (req, res) => {
-  const id = parseInt(req.params.id);
+  const sql = "SELECT * FROM posts WHERE id = ?";
+  const id = req.params.id;
 
-  const post = posts.find((elm) => elm.id === id);
+  connection.query(sql, [id], (err, results) => {
+    if (err) {
+      return res.status(500).json({
+        status: 500,
+        error: "Internal server error",
+        message: `Database query failed`,
+      });
+    }
 
-  if (!post) {
-    return res.status(404).json({
-      status: 404,
-      error: "Not Found",
-      message: `Post con ID ${id} non trovato!`,
-    });
-  }
+    const post = results[0];
 
-  res.json(post);
+    if (!post) {
+      return res.status(404).json({
+        status: 404,
+        error: "Not Found",
+        message: `Post con ID ${id} non trovato`,
+      });
+    }
+
+    res.json(post);
+  });
+
+  // const id = parseInt(req.params.id);
+
+  // const post = posts.find((elm) => elm.id === id);
+
+  // if (!post) {
+  //   return res.status(404).json({
+  //     status: 404,
+  //     error: "Not Found",
+  //     message: `Post con ID ${id} non trovato!`,
+  //   });
+  // }
+
+  // res.json(post);
 };
 
 // Store
