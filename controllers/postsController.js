@@ -1,17 +1,31 @@
-// imports
+// import mysql database
+const connection = require("../data/db.js");
+
+// imports fake database
 const posts = require("../data/postsData");
 
 // Index
 const index = (req, res) => {
   // throw new Error("Errore interno del server")
 
-  let filteredPosts = posts;
+  const sql = "SELECT * FROM posts";
 
-  if (req.query.tags) {
-    filteredPosts = posts.filter((post) => post.tags.includes(req.query.tags));
-  }
+  connection.query(sql, (err, results) => {
+    if (err) {
+      return res.status(500).json({
+        error: "Database query failed",
+      });
+    }
+    res.json(results);
+  });
 
-  res.json(filteredPosts);
+  // let filteredPosts = posts;
+
+  // if (req.query.tags) {
+  //   filteredPosts = posts.filter((post) => post.tags.includes(req.query.tags));
+  // }
+
+  // res.json(filteredPosts);
 };
 
 // Show
