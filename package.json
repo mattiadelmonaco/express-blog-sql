@@ -1,0 +1,24 @@
+{
+  "name": "express-blog-sql",
+  "version": "1.0.0",
+  "description": "exercise with express and mysql",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "watch": "node --watch app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mattiadelmonaco/express-blog-sql.git"
+  },
+  "author": "Mattia Del Monaco",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mattiadelmonaco/express-blog-sql/issues"
+  },
+  "homepage": "https://github.com/mattiadelmonaco/express-blog-sql#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2"
+  }
+}
