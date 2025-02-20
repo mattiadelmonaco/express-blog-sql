@@ -128,21 +128,33 @@ const modify = (req, res) => {
 
 // Destroy
 const destroy = (req, res) => {
-  const id = parseInt(req.params.id);
+  const sql = "DELETE FROM posts WHERE id = ?";
+  const id = req.params.id;
 
-  const post = posts.find((post) => post.id === id);
+  connection.query(sql, [id], (err) => {
+    if (err) {
+      return res.status(500).json({
+        error: "Failed to delete post",
+      });
+    }
+    res.sendStatus(204);
+  });
 
-  if (!post) {
-    return res.status(404).json({
-      status: 404,
-      error: "Not Found",
-      message: `Post con ID ${id} non trovato!`,
-    });
-  }
+  // const id = parseInt(req.params.id);
 
-  posts.splice(posts.indexOf(post), 1);
-  console.log(posts);
-  return res.sendStatus(204);
+  // const post = posts.find((post) => post.id === id);
+
+  // if (!post) {
+  //   return res.status(404).json({
+  //     status: 404,
+  //     error: "Not Found",
+  //     message: `Post con ID ${id} non trovato!`,
+  //   });
+  // }
+
+  // posts.splice(posts.indexOf(post), 1);
+  // console.log(posts);
+  // return res.sendStatus(204);
 };
 
 // DestroyAll
