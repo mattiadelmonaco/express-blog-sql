@@ -30,10 +30,17 @@ const index = (req, res) => {
 
 // Show
 const show = (req, res) => {
-  const sql = "SELECT * FROM posts WHERE id = ?";
+  const postSql = "SELECT * FROM posts WHERE id = ?";
+
+  const tagSql = `
+  SELECT tags.label
+  FROM tags
+  JOIN post_tag ON post_tag.tag_id = tags.id
+  WHERE post_tag.post_id = ?`;
+
   const id = req.params.id;
 
-  connection.query(sql, [id], (err, results) => {
+  connection.query(postSql, [id], (err, postResults) => {
     if (err) {
       return res.status(500).json({
         status: 500,
@@ -42,7 +49,7 @@ const show = (req, res) => {
       });
     }
 
-    const post = results[0];
+    const post = postResults[0];
 
     if (!post) {
       return res.status(404).json({
@@ -52,7 +59,18 @@ const show = (req, res) => {
       });
     }
 
-    res.json(post);
+    connection.query(tagSql, [id], (err, tagResults) => {
+      if (err) {
+        return res.status(500).json({
+          status: 500,
+          error: "Internal server error",
+          message: "Database query failed",
+        });
+      }
+
+      post.tags = tagResults;
+      res.json(post);
+    });
   });
 
   // const id = parseInt(req.params.id);
